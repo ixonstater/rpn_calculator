@@ -1,3 +1,1 @@
 name: "rpn_calculator"
-dependencies:
-  stack: ^0.1.3

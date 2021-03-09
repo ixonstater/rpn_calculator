@@ -1,5 +1,4 @@
-import 'dart:io';
-
+import 'dart:io' show stdout;
 import 'package:rpn_calculator/expression_validator.dart';
 import 'package:rpn_calculator/function_entity.dart';
 
@@ -125,14 +124,15 @@ class ExpressionParser {
   }
 
   void _printExpression(List<FunctionEntity> expression) {
+    String expressionStr = "";
     expression.forEach((FunctionEntity x) {
       if (x.type == EntityType.number) {
-        stdout.write(x.numberValue);
+        expressionStr += x.numberValue.toString();
       } else {
-        stdout.write(x.operatorStr);
+        expressionStr += x.operatorStr.toString();
       }
     });
-    stdout.flush();
+    print(expressionStr);
   }
 }
 
