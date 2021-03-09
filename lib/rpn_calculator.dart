@@ -13,14 +13,17 @@ class RpnCalculator {
     this._operands = new Stack<FunctionEntity>();
     this._operators = new Stack<FunctionEntity>();
     this._validator = new ExpressionValidator();
-    this._parser = new ExpressionParser();
+    this._parser = new ExpressionParser(this._validator);
   }
 
   double evaluate(String expression) {
     this._operands = new Stack<FunctionEntity>();
     this._operators = new Stack<FunctionEntity>();
     expression = expression.replaceAll(' ', '');
+    // Throws if expression is invalid
     this._validator.validate(expression);
+    // Throws if expression fails to parse
+    var entityExpression = this._parser.parseExpression(expression);
   }
 
   void _readInTokens() {}

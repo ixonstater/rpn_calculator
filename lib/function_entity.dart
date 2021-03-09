@@ -1,9 +1,9 @@
 class FunctionEntity {
-  final bool isOperator;
+  final EntityType type;
   final double numberValue;
-  final Operator type;
+  final String operatorStr;
 
-  FunctionEntity(this.isOperator, this.numberValue, this.type);
+  FunctionEntity(this.type, this.numberValue, this.operatorStr);
 }
 
-enum Operator { leftParen, rightParen, plus, minus, divide, multiply }
+enum EntityType { leftParen, rightParen, number, operatorToken }

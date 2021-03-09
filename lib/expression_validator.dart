@@ -90,7 +90,7 @@ class ExpressionValidator {
   }
 
   bool isDigit(String operand) {
-    return double.tryParse(operand) != null;
+    return (this.isDecimal(operand)) || (double.tryParse(operand) != null);
   }
 
   bool isDecimal(String decimal) {
