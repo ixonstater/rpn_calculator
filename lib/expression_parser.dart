@@ -1,4 +1,3 @@
-import 'dart:io' show stdout;
 import 'package:rpn_calculator/expression_validator.dart';
 import 'package:rpn_calculator/function_entity.dart';
 
@@ -9,12 +8,11 @@ class ExpressionParser {
   List<FunctionEntity> parseExpression(String expression) {
     var entityExpression = this._translateToFunctionEntities(expression);
     var parsedExpression = _replaceUnaryOperators(entityExpression);
-    this._printExpression(parsedExpression);
     return parsedExpression;
   }
 
   List<FunctionEntity> _replaceUnaryOperators(List<FunctionEntity> expression) {
-    var parsedExpression = new List<FunctionEntity>();
+    var parsedExpression = <FunctionEntity>[];
     var index = new ReferenceIndex();
     while (index < expression.length) {
       var current = expression[index.val()];
@@ -35,13 +33,13 @@ class ExpressionParser {
     expression.removeAt(index.val());
     // Insert multiplication symbol
     expression.insert(
-        index.val(), new FunctionEntity(EntityType.operatorToken, null, "*"));
+        index.val(), new FunctionEntity(EntityType.operatorToken, 0, "*"));
     // Insert negative one
     expression.insert(
-        index.val(), new FunctionEntity(EntityType.number, -1, null));
+        index.val(), new FunctionEntity(EntityType.number, -1, ""));
     // Insert left parenthesis
     expression.insert(
-        index.val(), new FunctionEntity(EntityType.leftParen, null, "("));
+        index.val(), new FunctionEntity(EntityType.leftParen, 0, "("));
 
     // Start seeking parenthesis insert spot from this location
     int parenIndex = index.val() + 2;
@@ -49,7 +47,7 @@ class ExpressionParser {
     if (!replacingUnaryMinus) {
       parenIndex++;
       expression.insert(
-          index.val(), new FunctionEntity(EntityType.operatorToken, null, "+"));
+          index.val(), new FunctionEntity(EntityType.operatorToken, 0, "+"));
     }
 
     // Find correct insert location for closing parenthesis
@@ -68,7 +66,7 @@ class ExpressionParser {
 
     // Insert closing parenthesis
     expression.insert(
-        parenIndex, new FunctionEntity(EntityType.rightParen, null, ")"));
+        parenIndex, new FunctionEntity(EntityType.rightParen, 0, ")"));
   }
 
   bool isUnaryMinus(ReferenceIndex index, List<FunctionEntity> expression) {
@@ -83,20 +81,19 @@ class ExpressionParser {
   }
 
   List<FunctionEntity> _translateToFunctionEntities(String expression) {
-    var entities = new List<FunctionEntity>();
+    var entities = <FunctionEntity>[];
     var index = new ReferenceIndex();
     while (index < expression.length) {
       String current = expression[index.val()];
       if (_validator.isOperator(current)) {
-        entities
-            .add(new FunctionEntity(EntityType.operatorToken, null, current));
+        entities.add(new FunctionEntity(EntityType.operatorToken, 0, current));
       } else if (_validator.isLeftParen(current)) {
-        entities.add(new FunctionEntity(EntityType.leftParen, null, current));
+        entities.add(new FunctionEntity(EntityType.leftParen, 0, current));
       } else if (_validator.isRightParen(current)) {
-        entities.add(new FunctionEntity(EntityType.rightParen, null, current));
+        entities.add(new FunctionEntity(EntityType.rightParen, 0, current));
       } else if (_validator.isDigit(current)) {
         entities.add(new FunctionEntity(
-            EntityType.number, this._parseNumber(expression, index), null));
+            EntityType.number, this._parseNumber(expression, index), ""));
       }
 
       index.inc();
@@ -114,7 +111,7 @@ class ExpressionParser {
       assembled += expression[index.val()];
     }
 
-    double value = double.tryParse(assembled);
+    double? value = double.tryParse(assembled);
     if (value == null) {
       throw new RpnParserException(
           "Failed to parse double from given string: " + assembled);
@@ -123,7 +120,7 @@ class ExpressionParser {
     return value;
   }
 
-  void _printExpression(List<FunctionEntity> expression) {
+  void printExpression(List<FunctionEntity> expression) {
     String expressionStr = "";
     expression.forEach((FunctionEntity x) {
       if (x.type == EntityType.number) {

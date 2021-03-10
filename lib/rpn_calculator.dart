@@ -5,10 +5,10 @@ import 'package:rpn_calculator/expression_validator.dart';
 import 'package:rpn_calculator/function_entity.dart';
 
 class RpnCalculator {
-  Queue<FunctionEntity> _operators;
-  Queue<FunctionEntity> _operands;
-  ExpressionValidator _validator;
-  ExpressionParser _parser;
+  late Queue<FunctionEntity> _operators;
+  late Queue<FunctionEntity> _operands;
+  late ExpressionValidator _validator;
+  late ExpressionParser _parser;
 
   RpnCalculator() {
     this._operands = new Queue<FunctionEntity>();

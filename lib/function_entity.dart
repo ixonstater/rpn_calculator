@@ -6,23 +6,35 @@ class FunctionEntity {
   FunctionEntity(this.type, this.numberValue, this.operatorStr);
 
   FunctionEntity operator -(FunctionEntity rhs) {
+    this._canApplyNumericOperator();
     return new FunctionEntity(
-        EntityType.number, this.numberValue - rhs.numberValue, null);
+        EntityType.number, this.numberValue - rhs.numberValue, "");
   }
 
   FunctionEntity operator +(FunctionEntity rhs) {
+    this._canApplyNumericOperator();
     return new FunctionEntity(
-        EntityType.number, this.numberValue + rhs.numberValue, null);
+        EntityType.number, this.numberValue + rhs.numberValue, "");
   }
 
   FunctionEntity operator *(FunctionEntity rhs) {
+    this._canApplyNumericOperator();
     return new FunctionEntity(
-        EntityType.number, this.numberValue * rhs.numberValue, null);
+        EntityType.number, this.numberValue * rhs.numberValue, "");
   }
 
   FunctionEntity operator /(FunctionEntity rhs) {
+    this._canApplyNumericOperator();
     return new FunctionEntity(
-        EntityType.number, this.numberValue / rhs.numberValue, null);
+        EntityType.number, this.numberValue / rhs.numberValue, "");
+  }
+
+  void _canApplyNumericOperator() {
+    if (!(this.type == EntityType.number)) {
+      throw new FunctionEntityException(
+          "Cannot apply numeric operator to entity of type " +
+              this.type.toString());
+    }
   }
 
   bool sameOrGreaterPrecedence(FunctionEntity compare) {
@@ -41,3 +53,9 @@ class FunctionEntity {
 }
 
 enum EntityType { leftParen, rightParen, number, operatorToken }
+
+class FunctionEntityException implements Exception {
+  final String msg;
+  const FunctionEntityException(this.msg);
+  String toString() => 'FunctionEntityException: $msg';
+}
