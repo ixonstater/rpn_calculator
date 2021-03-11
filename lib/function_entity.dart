@@ -6,31 +6,31 @@ class FunctionEntity {
   FunctionEntity(this.type, this.numberValue, this.operatorStr);
 
   FunctionEntity operator -(FunctionEntity rhs) {
-    this._canApplyNumericOperator();
+    this._canApplyNumericOperator(rhs);
     return new FunctionEntity(
         EntityType.number, this.numberValue - rhs.numberValue, "");
   }
 
   FunctionEntity operator +(FunctionEntity rhs) {
-    this._canApplyNumericOperator();
+    this._canApplyNumericOperator(rhs);
     return new FunctionEntity(
         EntityType.number, this.numberValue + rhs.numberValue, "");
   }
 
   FunctionEntity operator *(FunctionEntity rhs) {
-    this._canApplyNumericOperator();
+    this._canApplyNumericOperator(rhs);
     return new FunctionEntity(
         EntityType.number, this.numberValue * rhs.numberValue, "");
   }
 
   FunctionEntity operator /(FunctionEntity rhs) {
-    this._canApplyNumericOperator();
+    this._canApplyNumericOperator(rhs);
     return new FunctionEntity(
         EntityType.number, this.numberValue / rhs.numberValue, "");
   }
 
-  void _canApplyNumericOperator() {
-    if (!(this.type == EntityType.number)) {
+  void _canApplyNumericOperator(FunctionEntity rhs) {
+    if (!(this.type == EntityType.number && rhs.type == EntityType.number)) {
       throw new FunctionEntityException(
           "Cannot apply numeric operator to entity of type " +
               this.type.toString());

@@ -68,13 +68,15 @@ class ExpressionValidatorTest {
     });
 
     test("operator followed by invalid character should throw", () {
-      [
-        ..._digits,
-        ...['-', '(']
-      ].forEach((element) {
+      ['+', '*', '/'].forEach((element) {
         expect(() => _validator.validate("+" + element),
             throwsA(TypeMatcher<RpnValidationException>()));
       });
+    });
+
+    test("digits followed by invalid character should throw", () {
+      expect(() => _validator.validate("1("),
+          throwsA(TypeMatcher<RpnValidationException>()));
     });
   }
 
